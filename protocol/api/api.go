@@ -123,6 +123,9 @@ func (s *Server) Serve(l net.Listener) error {
 	mux.HandleFunc("/stat/livestat", func(w http.ResponseWriter, r *http.Request) {
 		s.GetLiveStatics(w, r)
 	})
+	mux.HandleFunc("/control/config", func(w http.ResponseWriter, r *http.Request) {
+		s.handleConfig(w, r)
+	})
 	http.Serve(l, JWTMiddleware(mux))
 	return nil
 }
@@ -391,6 +394,29 @@ func (s *Server) handleGet(w http.ResponseWriter, r *http.Request) {
 		res.Status = 400
 	}
 	res.Data = msg
+}
+
+// 接收来自注册中心的参数查询接口 返回所有服务的端口
+func (s *Server)handleConfig(w http.ResponseWriter, r *http.Request) {
+	res := &Response{
+		w:      w,
+		Data:   nil,
+		Status: 200,
+	}
+	defer res.SendJson()
+	type conf struct {
+		RtmpAddr string `json:"rtmp_addr"`
+		HttpFlvAddr string `json:"httpflv_addr"`
+		HlsAddr string `json:"hls_addr"`
+		ApiAddr string `json:"api_addr"`
+	}
+	respBody := conf{
+		RtmpAddr:    configure.Config.GetString("rtmp_addr"),
+		HttpFlvAddr: configure.Config.GetString("httpflv_addr"),
+		HlsAddr:     configure.Config.GetString("hls_addr"),
+		ApiAddr:     configure.Config.GetString("api_addr"),
+	}
+	res.Data = respBody
 }
 
 //http://127.0.0.1:8090/control/delete?room=ROOM_NAME

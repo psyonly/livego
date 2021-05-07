@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gwuhaolin/livego/configure"
+	"github.com/gwuhaolin/livego/heart"
 	"github.com/gwuhaolin/livego/protocol/api"
 	"github.com/gwuhaolin/livego/protocol/hls"
 	"github.com/gwuhaolin/livego/protocol/httpflv"
@@ -133,9 +134,10 @@ func main() {
     |_____|_| \_/ \___|\____|\___/ 
         version: %s
 	`, VERSION)
-
+	go heart.SendHeart()
 	apps := configure.Applications{}
 	configure.Config.UnmarshalKey("server", &apps)
+	fmt.Println(configure.Config.Get("httpflv_addr"))
 	for _, app := range apps {
 		stream := rtmp.NewRtmpStream()
 		var hlsServer *hls.Server

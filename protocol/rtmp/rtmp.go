@@ -143,6 +143,7 @@ func (s *Server) handleConn(conn *core.Conn) error {
 		if pushlist, ret := configure.GetStaticPushUrlList(appname); ret && (pushlist != nil) {
 			log.Debugf("GetStaticPushUrlList: %v", pushlist)
 		}
+		fmt.Println("launched ok")
 		reader := NewVirReader(connServer)
 		s.handler.HandleReader(reader)
 		log.Debugf("new publisher: %+v", reader.Info())

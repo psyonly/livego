@@ -113,6 +113,7 @@ func init() {
 	pflag.Int("read_timeout", 10, "read time out")
 	pflag.Int("write_timeout", 10, "write time out")
 	pflag.Int("gop_num", 1, "gop num")
+	pflag.String("register", "127.0.0.1:9874", "register center") // 注册中心IP
 	pflag.Parse()
 	Config.BindPFlags(pflag.CommandLine)
 
