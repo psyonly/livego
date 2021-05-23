@@ -2,6 +2,7 @@ package rtmp
 
 import (
 	"fmt"
+	"github.com/gwuhaolin/livego/heart"
 	"strings"
 	"sync"
 	"time"
@@ -313,7 +314,8 @@ func (s *Stream) TransStart() {
 	log.Debugf("TransStart: %v", s.info)
 
 	s.StartStaticPush()
-
+	fmt.Println("start")
+	heart.SendStatus("Push")
 	for {
 		if !s.isStart {
 			s.closeInter()
@@ -321,6 +323,8 @@ func (s *Stream) TransStart() {
 		}
 		err := s.r.Read(&p)
 		if err != nil {
+			fmt.Println("end")
+			heart.SendStatus("Block")
 			s.closeInter()
 			s.isStart = false
 			return

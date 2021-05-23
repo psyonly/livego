@@ -19,3 +19,14 @@ func SendHeart() {
 		}
 	}
 }
+
+// SendStatus 是推流信号发送
+func SendStatus(signal string) {
+	target := configure.Config.Get("register")
+	url := fmt.Sprintf("http://%s/lg/status?port=%s&status=%s", target, configure.Config.Get("api_addr"), signal)
+
+	_, err := http.Get(url)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
